@@ -27,6 +27,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from goods.views import GoodsViewSet
 from order_status.views import OrderStatusViewSet
 from orders.views import OrderViewSet
+from users.views import GetUser
 
 router = routers.DefaultRouter()
 router.register(r"orders", OrderViewSet)
@@ -35,6 +36,7 @@ router.register(r"goods", GoodsViewSet)
 
 urlpatterns = [
     path("api/", include(router.urls)),
+    path('api/user/', GetUser.as_view()),
     path("admin/", admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

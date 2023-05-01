@@ -32,7 +32,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             "updated_at",
         ]
 
-    def get_total_price(self, obj: Order):
+    def get_total_price(self, obj: Order) -> float:
         return obj.orderitem_set.aggregate(sum=Sum("total_price"))["sum"]
 
 
