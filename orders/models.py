@@ -20,10 +20,14 @@ class Order(models.Model):
         SELF = 'SELF', _('Self')
         DELIVERY = 'DELIVERY', _('Delivery')
 
+    class PaymentMethod(models.TextChoices):
+        ONLINE = 'ONLINE', _('Online')
+        IN_PLACE = 'IN_PLACE', _('In_place')
+
     order_number = models.AutoField(primary_key=True, editable=False)
     pharmacy = models.CharField(max_length=100)
     status = models.ForeignKey('order_status.OrderStatus', on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=100)
+    payment_method = models.CharField(choices=PaymentMethod.choices, max_length=100,  default=PaymentMethod.ONLINE)
     delivery_method = models.CharField(choices=DeliveryMethod.choices, max_length=100, default=DeliveryMethod.DELIVERY)
     delivery_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     customer_phone = models.CharField(max_length=100, blank=True, null=True)

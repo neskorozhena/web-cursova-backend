@@ -4,13 +4,31 @@ from rest_framework import serializers
 from goods.serializers import GoodsSerializer
 from order_status.serializers import OrderStatusSerializer
 from order_status.models import OrderStatus
-from orders.models import Order
+from orders.models import Order, OrderItem
+
+
+class OrderItemSerializer(serializers.HyperlinkedModelSerializer):
+    # goods = GoodsSerializer(read_only=True)
+    name = serializers.ReadOnlyField(source='goods.name')
+    manufacturer = serializers.ReadOnlyField(source='goods.manufacturer')
+    sku = serializers.ReadOnlyField(source='goods.sku')
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            'name',
+            'manufacturer',
+            'sku',
+            'quantity',
+            'total_price',
+            'created_at'
+        ]
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     total_price = serializers.SerializerMethodField()
     status = OrderStatusSerializer(read_only=True)
-    items = GoodsSerializer(many=True, read_only=True)
+    items = OrderItemSerializer(source='orderitem_set', many=True, read_only=True)
 
     class Meta:
         model = Order
